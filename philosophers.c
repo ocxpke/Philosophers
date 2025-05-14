@@ -12,9 +12,17 @@
 
 #include "philosophers.h"
 
-int	main(int argc, char **argv)
-{
-	if (argc != 5 || argc != 6)
-		return (write(2, "Error\n", 6), 1);
+int main(int argc, char **argv) {
+  t_symposium symposium;
+  t_philosopher *philosopher;
+  pthread_t *philo_threads;
 
+  if (argc < 5 || argc > 6)
+    return (write(2, "Error\n", 6), 1);
+
+  start_philo_t(argc, argv, &symposium);
+  printf("Hola\n");
+  create_philos(&symposium, &philosopher, &philo_threads);
+  while (1)
+    ;
 }

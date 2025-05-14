@@ -10,36 +10,53 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef PHILOSOPHERS_H
+#define PHILOSOPHERS_H
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-typedef struct meal_queue
-{
-	t_philosopher	philo;
-	t_philosopher	*next;
-};
+typedef struct eat_stack {
+  int philo_id;
+  struct eat_stack *philo_next;
+} t_eat_stack;
 
-typedef struct s_philosopher
-{
-	int				id;
-	pthread_t		philo;
-	__useconds_t	time_starving;
-	int				times_eaten;
-}					t_philosopher;
+typedef struct s_philosopher {
+  pthread_mutex_t *forks;
+  pthread_mutex_t kylix;
+  __useconds_t time_to_die;
+  __useconds_t time_to_eat;
+  __useconds_t time_to_sleep;
+  int eat_n_times;
+  int id;
+  int id_left;
+  t_eat_stack **eat_stack;
+} t_philosopher;
 
-typedef struct s_symposium
-{
-	t_philosopher	*philosophers;
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	kylix;
-	__useconds_t	time_to_die;
-	__useconds_t	time_to_eat;
-	__useconds_t	time_to_sleep;
-	int				eat_n_times;
-	int				assitants;
-}					t_symposium;
+typedef struct s_symposium {
+  pthread_t *philo;
+  pthread_mutex_t *forks;
+  pthread_mutex_t kylix;
+  __useconds_t time_to_die;
+  __useconds_t time_to_eat;
+  __useconds_t time_to_sleep;
+  int eat_n_times;
+  int assitants;
+  t_eat_stack *eat_stack;
+} t_symposium;
 
-int					ft_atoi(const char *nptr);
+void start_philo_t(int argc, char **argv, t_symposium *symposium);
+
+void create_philos(t_symposium *symposium, t_philosopher **philosophers,
+                   pthread_t **philo_threads);
+
+t_eat_stack *init_eat_stack(int assistants);
+
+void *philo_life(void *philo_info);
+
+int ft_atoi(const char *nptr);
+
+#endif
