@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:28 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 21:09:27 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:10:14 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	philo_meal(t_philosopher *philo)
 	pthread_mutex_lock(&(philo->forks[second_to_take]));
 	philo_says(philo, "has taken a fork");
 	philo_says(philo, "is eating");
-	usleep(philo->time_to_eat);
+	usleep(philo->time_to_eat * 1000);
 	philo->last_meal_time = get_act_time();
 	pthread_mutex_unlock(&(philo->forks[first_to_take]));
 	pthread_mutex_unlock(&(philo->forks[second_to_take]));
@@ -65,7 +65,7 @@ void	*philo_life(void *philo_info)
 		if (philo->alive)
 		{
 			philo_says(philo, "is sleeping");
-			usleep(philo->time_to_sleep);
+			usleep(philo->time_to_sleep * 1000);
 		}
 	}
 	if (!philo->alive)

@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 21:55:08 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:09:19 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*check_philos_alive(void *philos)
 	i = 0;
 	while (i < all_philos[0].assistants)
 	{
-		all_philos[0].exec = 0;
+		all_philos[i].exec = 0;
 		i++;
 	}
 	return (NULL);

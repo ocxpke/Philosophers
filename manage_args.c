@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:56:17 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 21:53:01 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/15 22:10:09 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ static inline void	load_init_values(int argc, char **argv,
 	aux = ft_atoi(argv[2]);
 	if (aux <= 0)
 		exit(EXIT_FAILURE);
-	symposium->time_to_die = aux * 1000;
+	symposium->time_to_die = aux;
 	aux = ft_atoi(argv[3]);
 	if (aux <= 0)
 		exit(EXIT_FAILURE);
-	symposium->time_to_eat = aux * 1000;
+	symposium->time_to_eat = aux;
 	aux = ft_atoi(argv[4]);
 	if (aux <= 0)
 		exit(EXIT_FAILURE);
-	symposium->time_to_sleep = aux * 1000;
+	symposium->time_to_sleep = aux;
 	if (argc == 6)
 	{
 		aux = ft_atoi(argv[5]);
