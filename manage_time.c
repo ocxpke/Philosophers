@@ -6,13 +6,13 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/14 21:32:01 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/15 19:49:12 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	get_act_time(void)
+inline int	get_act_time(void)
 {
 	struct timeval	time;
 
