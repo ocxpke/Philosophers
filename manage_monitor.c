@@ -6,37 +6,59 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 22:09:19 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:52:06 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void	*check_philos_alive(void *philos)
+static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 {
-	t_philosopher	*all_philos;
-	int				cont;
-	int				i;
+	int	i;
 
-	all_philos = (t_philosopher *)philos;
-	cont = 1;
-	while (cont)
+	i = 0;
+	while (i < all_philos[0].assistants)
 	{
-		i = 0;
-		while (i < all_philos[0].assistants)
+		if (all_philos[i].last_meal_time > all_philos[i].time_to_die)
 		{
-			if (!all_philos[i].alive || !all_philos[i].eat_n_times)
-				cont = 0;
-			i++;
+			pthread_mutex_lock(&(all_philos[i].check_status));
+			all_philos[i].exec = 0;
+			pthread_mutex_lock(&all_philos[i].kylix);
+			printf("[%d] %d died\n", exec_time(&all_philos[i]), all_philos[i].id
+				+ 1);
+			pthread_mutex_unlock(&all_philos[i].kylix);
+			pthread_mutex_unlock(&(all_philos[i].check_status));
+			*loop = 0;
 		}
-		usleep(1000);
+		else if (all_philos[i].eat_n_times == 0)
+			*loop = 0;
+		i++;
 	}
+	usleep(500);
+}
+
+static inline void	stop_running_philos(t_philosopher *all_philos)
+{
+	int	i;
+
 	i = 0;
 	while (i < all_philos[0].assistants)
 	{
 		all_philos[i].exec = 0;
 		i++;
 	}
+}
+
+void	*monitoring_philos(void *philos)
+{
+	t_philosopher	*all_philos;
+	int				loop;
+
+	all_philos = (t_philosopher *)philos;
+	loop = 1;
+	while (loop)
+		check_philos_status(philos, &loop);
+	stop_running_philos(all_philos);
 	return (NULL);
 }
 
@@ -44,6 +66,6 @@ void	launch_philo_monitor(t_philosopher *philosophers)
 {
 	pthread_t	philo_monitor;
 
-	pthread_create(&philo_monitor, NULL, check_philos_alive, philosophers);
+	pthread_create(&philo_monitor, NULL, monitoring_philos, philosophers);
 	pthread_detach(philo_monitor);
 }

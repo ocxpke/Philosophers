@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:58:59 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 21:53:49 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:53:56 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_philosopher
 {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	kylix;
+	pthread_mutex_t	check_status;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -32,7 +33,6 @@ typedef struct s_philosopher
 	int				eat_n_times;
 	int				id;
 	int				id_left;
-	int				alive;
 	int				exec;
 	int				assistants;
 }					t_philosopher;
@@ -58,6 +58,8 @@ void				create_philos(t_symposium *symposium,
 void				*philo_life(void *philo_info);
 
 int					get_act_time(void);
+
+int					exec_time(t_philosopher *philo);
 
 void				launch_philo_monitor(t_philosopher *philosophers);
 

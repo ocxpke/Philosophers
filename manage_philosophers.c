@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:45 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 21:42:54 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:54:00 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ inline static void	fill_philos(t_symposium *symposium,
 		philosophers[i].eat_n_times = symposium->eat_n_times;
 		philosophers[i].init_time = init_time;
 		philosophers[i].last_meal_time = -1;
-		philosophers[i].alive = 1;
 		philosophers[i].exec = 1;
 		philosophers[i].assistants = symposium->assistants;
+		pthread_mutex_init(&(philosophers[i].check_status), NULL);
 		i++;
 	}
 }
