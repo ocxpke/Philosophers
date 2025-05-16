@@ -10,14 +10,22 @@ SRC = philosophers.c \
 	manage_monitor.c\
 	manage_philosophers.c\
 
-OBJ = $(SRC:.c=.o)
+OBJS = $(SRC:.c=.o)
 
 FLAGS = -Wall -Wextra -Werror -g
 
-all:$(NAME)
+all: $(NAME)
 
-$(NAME): $(OBJ)
-	cc $(FLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJS)
+	cc $(FLAGS) $(OBJS) -o $(NAME)
 
 %.o: %.c
-	cc $(CFLAGS) -o $@ -c $<
+	cc $(FLAGS) -o $@ -c $<
+
+clean:
+	rm -rf $(OBJS)
+
+fclean: clean
+	rm -rf $(NAME)
+
+re: fclean all

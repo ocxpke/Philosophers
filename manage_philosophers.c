@@ -6,13 +6,27 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:45 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/16 20:54:00 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:56:58 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-inline static void	fill_philos(t_symposium *symposium,
+static inline void	free_on_error(t_symposium *symposium,
+		t_philosopher **philosophers, int c)
+{
+	free(symposium->forks);
+	if (c == 1)
+	{
+		free(*philosophers);
+		write(2, "Error allocating the memory needed for philo threads\n", 53);
+	}
+	else
+		write(2, "Error allocating the memory needed for philostructs\n", 52);
+	exit(EXIT_FAILURE);
+}
+
+static inline void	fill_philos(t_symposium *symposium,
 		t_philosopher *philosophers, int init_time)
 {
 	int	i;
@@ -32,6 +46,7 @@ inline static void	fill_philos(t_symposium *symposium,
 		philosophers[i].last_meal_time = -1;
 		philosophers[i].exec = 1;
 		philosophers[i].assistants = symposium->assistants;
+		philosophers[i].get_time = symposium->get_time;
 		pthread_mutex_init(&(philosophers[i].check_status), NULL);
 		i++;
 	}
@@ -58,14 +73,12 @@ void	create_philos(t_symposium *symposium, t_philosopher **philosophers,
 
 	*philosophers = (t_philosopher *)malloc(symposium->assistants
 			* sizeof(t_philosopher));
-	// need to free sympos
 	if (!*philosophers)
-		exit(EXIT_FAILURE);
+		free_on_error(symposium, philosophers, 0);
 	*philo_threads = (pthread_t *)malloc(symposium->assistants
 			* sizeof(pthread_t));
-	// need to free sympos & philosophers
 	if (!*philo_threads)
-		exit(EXIT_FAILURE);
+		free_on_error(symposium, philosophers, 1);
 	init_time = get_act_time();
 	fill_philos(symposium, *philosophers, init_time);
 	run_philos(symposium->assistants, *philosophers, *philo_threads);

@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:28 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/16 20:53:48 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:55:35 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 inline int	exec_time(t_philosopher *philo)
 {
-	return (get_act_time() - philo->init_time);
+	int	ret;
+
+	pthread_mutex_lock(&philo->get_time);
+	ret = get_act_time() - philo->init_time;
+	pthread_mutex_unlock(&philo->get_time);
+	return (ret);
 }
 
 static inline void	philo_says(t_philosopher *philo, char *message)

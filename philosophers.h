@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:58:59 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/16 20:53:56 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:55:00 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_philosopher
 {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	kylix;
+	pthread_mutex_t	get_time;
 	pthread_mutex_t	check_status;
 	int				time_to_die;
 	int				time_to_eat;
@@ -41,6 +42,7 @@ typedef struct s_symposium
 {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	kylix;
+	pthread_mutex_t	get_time;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;

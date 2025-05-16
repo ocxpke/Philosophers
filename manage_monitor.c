@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/16 20:52:06 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:58:45 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 			pthread_mutex_lock(&(all_philos[i].check_status));
 			all_philos[i].exec = 0;
 			pthread_mutex_lock(&all_philos[i].kylix);
+			pthread_mutex_lock(&all_philos[i].get_time);
 			printf("[%d] %d died\n", exec_time(&all_philos[i]), all_philos[i].id
 				+ 1);
+			pthread_mutex_unlock(&all_philos[i].get_time);
 			pthread_mutex_unlock(&all_philos[i].kylix);
 			pthread_mutex_unlock(&(all_philos[i].check_status));
 			*loop = 0;

@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:56:17 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/15 22:10:09 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/16 21:56:34 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ inline static void	create_mutexs(t_symposium *symposium)
 		i++;
 	}
 	pthread_mutex_init(&(symposium->kylix), NULL);
+	pthread_mutex_init(&(symposium->get_time), NULL);
 }
 
 void	start_philo_t(int argc, char **argv, t_symposium *symposium)
