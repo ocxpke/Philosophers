@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:28 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/16 21:55:35 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/18 19:44:57 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	philo_meal(t_philosopher *philo)
 	pthread_mutex_lock(&(philo->forks[second_to_take]));
 	philo_says(philo, "has taken a fork");
 	philo_says(philo, "is eating");
-	philo->last_meal_time = get_act_time() - philo->last_meal_time;
 	usleep(philo->time_to_eat * 1000);
 	philo->last_meal_time = get_act_time();
 	pthread_mutex_unlock(&(philo->forks[first_to_take]));
