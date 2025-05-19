@@ -19,16 +19,16 @@ static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 	i = 0;
 	while (i < all_philos[0].assistants)
 	{
-		if ((all_philos[i].last_meal_time
-				- all_philos[i].init_time) > all_philos[i].time_to_die)
+		if ((get_act_time()
+				- all_philos[i].last_meal_time) > all_philos[i].time_to_die)
 		{
 			pthread_mutex_lock(&(all_philos[i].check_status));
 			all_philos[i].exec = 0;
+			pthread_mutex_unlock(&(all_philos[i].check_status));
 			pthread_mutex_lock(&(all_philos[i].kylix));
 			printf("[%d] %d died\n", exec_time(&all_philos[i]), all_philos[i].id
 				+ 1);
 			pthread_mutex_unlock(&(all_philos[i].kylix));
-			pthread_mutex_unlock(&(all_philos[i].check_status));
 			*loop = 0;
 		}
 		else if (all_philos[i].eat_n_times == 0)
