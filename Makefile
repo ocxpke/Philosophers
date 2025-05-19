@@ -4,10 +4,12 @@ NAME_BONUS = philo_bonus
 
 SRC = philosophers.c \
 	ft_itoa.c\
+	ft_usleep.c\
 	philo_life.c\
 	manage_args.c\
 	manage_time.c\
 	manage_monitor.c\
+	philo_life_aux.c\
 	manage_philosophers.c\
 
 OBJS = $(SRC:.c=.o)

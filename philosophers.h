@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:58:59 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/16 21:55:00 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/19 20:21:57 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_philosopher
 	pthread_mutex_t	kylix;
 	pthread_mutex_t	get_time;
 	pthread_mutex_t	check_status;
+	pthread_mutex_t	check_if_dead;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -66,5 +67,12 @@ int					exec_time(t_philosopher *philo);
 void				launch_philo_monitor(t_philosopher *philosophers);
 
 int					ft_atoi(const char *nptr);
+
+void				ft_usleep(t_philosopher *philo, int time_to_wait);
+
+void				assing_order_forks(t_philosopher *philo, int *first_to_take,
+						int *second_to_take);
+
+void				wait_till_dead(t_philosopher *philo);
 
 #endif

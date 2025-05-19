@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/18 21:06:08 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/19 20:24:37 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 
 static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 {
+	int	time_passed;
 	int	i;
 
 	i = 0;
 	while (i < all_philos[0].assistants)
 	{
-		if ((get_act_time()
-				- all_philos[i].last_meal_time) > all_philos[i].time_to_die)
+		pthread_mutex_lock(&(all_philos[i].check_if_dead));
+		time_passed = (get_act_time() - all_philos[i].last_meal_time);
+		pthread_mutex_unlock(&(all_philos[i].check_if_dead));
+		if (time_passed > all_philos[i].time_to_die)
 		{
 			pthread_mutex_lock(&(all_philos[i].check_status));
 			all_philos[i].exec = 0;
@@ -35,7 +38,7 @@ static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 			*loop = 0;
 		i++;
 	}
-	usleep(250);
+	usleep(100);
 }
 
 static inline void	stop_running_philos(t_philosopher *all_philos)

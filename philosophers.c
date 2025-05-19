@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:58:38 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/18 19:28:48 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/19 20:22:39 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static inline void	free_philo(t_symposium symposium,
 	while (i < symposium.assistants)
 	{
 		pthread_mutex_destroy(&(philosopher[i].check_status));
+		pthread_mutex_destroy(&(philosopher[i].check_if_dead));
 		pthread_mutex_destroy(&(symposium.forks[i]));
 		i++;
 	}
