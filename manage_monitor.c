@@ -6,11 +6,27 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/05/19 20:24:37 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/05/22 21:32:59 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+static inline int	all_ended_eating(t_philosopher *all_philos)
+{
+	int	ret;
+	int	i;
+
+	i = 0;
+	ret = 0;
+	while (i < all_philos[0].assistants)
+	{
+		if (all_philos[i].eat_n_times > 0)
+			ret = 1;
+		i++;
+	}
+	return (ret);
+}
 
 static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 {
@@ -18,6 +34,7 @@ static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 	int	i;
 
 	i = 0;
+	*loop = all_ended_eating(all_philos);
 	while (i < all_philos[0].assistants)
 	{
 		pthread_mutex_lock(&(all_philos[i].check_if_dead));
@@ -34,8 +51,6 @@ static inline void	check_philos_status(t_philosopher *all_philos, int *loop)
 			pthread_mutex_unlock(&(all_philos[i].kylix));
 			*loop = 0;
 		}
-		else if (all_philos[i].eat_n_times == 0)
-			*loop = 0;
 		i++;
 	}
 	usleep(100);
