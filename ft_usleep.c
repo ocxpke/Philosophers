@@ -12,13 +12,12 @@
 
 #include "philosophers.h"
 
-inline void	ft_usleep(t_philosopher *philo, int time_to_wait)
-{
-	int	init_time;
+inline void ft_usleep(t_philosopher *philo, int time_to_wait) {
+  int init_time;
 
-	if (!philo->exec)
-		return ;
-	init_time = get_act_time();
-	while ((get_act_time() - init_time) < time_to_wait)
-		usleep(100);
+  if (!philo->exec)
+    return;
+  init_time = get_act_time();
+  while (((get_act_time() - init_time) < time_to_wait) && (philo->exec))
+    usleep(100);
 }
