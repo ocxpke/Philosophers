@@ -49,6 +49,9 @@ void philo_meal(t_philosopher *philo) {
   philo->last_meal_time = get_act_time();
   pthread_mutex_unlock(&(philo->check_if_dead));
   ft_usleep(philo, philo->time_to_eat);
+  pthread_mutex_lock(&(philo->check_if_dead));
+  philo->last_meal_time = get_act_time();
+  pthread_mutex_unlock(&(philo->check_if_dead));
   pthread_mutex_unlock(&(philo->forks[first_to_take]));
   pthread_mutex_unlock(&(philo->forks[second_to_take]));
   if (philo->eat_n_times > 0)

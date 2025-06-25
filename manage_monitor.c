@@ -44,7 +44,7 @@ static inline void check_philos_status(t_philosopher *all_philos, int *loop) {
       pthread_mutex_unlock(&(all_philos[i].check_status));
       pthread_mutex_lock(&(all_philos[i].kylix));
       printf("[%d] %d died\n", exec_time(&all_philos[i]), all_philos[i].id + 1);
-      pthread_mutex_unlock(&(all_philos[i].kylix));
+      //pthread_mutex_unlock(&(all_philos[i].kylix));
       *loop = 0;
     }
     i++;

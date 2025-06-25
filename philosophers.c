@@ -41,7 +41,7 @@ int	main(int argc, char **argv)
 
 	i = 0;
 	if (argc < 5 || argc > 6)
-		return (write(2, "Error, not enough arguments\n", 28), 1);
+		return (write(2, "Invalid arguments", 17), EXIT_FAILURE);
 	start_philo_t(argc, argv, &symposium);
 	create_philos(&symposium, &philosophers, &philo_threads);
 	launch_philo_monitor(philosophers);

@@ -3,7 +3,7 @@ NAME = philo
 NAME_BONUS = philo_bonus
 
 SRC = philosophers.c \
-	ft_itoa.c\
+	philo_aux.c\
 	ft_usleep.c\
 	philo_life.c\
 	manage_args.c\
