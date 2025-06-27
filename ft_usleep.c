@@ -12,12 +12,21 @@
 
 #include "philosophers.h"
 
-inline void ft_usleep(t_philosopher *philo, int time_to_wait) {
+inline void ft_usleep(t_philo_single *philo, int time_to_wait) {
   int init_time;
 
-  if (!philo->exec)
+  pthread_mutex_lock(&(philo->check_if_alive));
+  if (!philo->alive) {
+    pthread_mutex_unlock(&(philo->check_if_alive));
     return;
+  }
+  pthread_mutex_unlock(&(philo->check_if_alive));
   init_time = get_act_time();
-  while (((get_act_time() - init_time) < time_to_wait) && (philo->exec))
-    usleep(100);
+  pthread_mutex_lock(&(philo->check_if_alive));
+  while (((get_act_time() - init_time) < time_to_wait) && (philo->alive)) {
+    pthread_mutex_unlock(&(philo->check_if_alive));
+    usleep(10);
+    pthread_mutex_lock(&(philo->check_if_alive));
+  }
+  pthread_mutex_unlock(&(philo->check_if_alive));
 }

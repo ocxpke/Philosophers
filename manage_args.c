@@ -30,55 +30,58 @@ static int get_num(char *arg) {
   ret = ft_latoi(arg);
   if ((ret > INT_MAX) || (ret < INT_MIN))
     return (-1);
-  return ((int) ret);
+  return ((int)ret);
 }
 
 static inline void load_init_values(int argc, char **argv,
-                                    t_symposium *symposium) {
+                                    t_philo_common *common_args) {
   int aux;
 
   aux = get_num(argv[1]);
   if (aux <= 0)
-    return (write(STDERR_FILENO, "Invalid args", 12), exit(EXIT_FAILURE));
-  symposium->assistants = aux;
+    return (write(STDERR_FILENO, "Invalid args\n", 13), exit(EXIT_FAILURE));
+  common_args->assistants = aux;
   aux = get_num(argv[2]);
   if (aux <= 0)
-    return (write(STDERR_FILENO, "Invalid args", 12), exit(EXIT_FAILURE));
-  symposium->time_to_die = aux;
+    return (write(STDERR_FILENO, "Invalid args\n", 13), exit(EXIT_FAILURE));
+  common_args->time_to_die = aux;
   aux = get_num(argv[3]);
   if (aux <= 0)
-    return (write(STDERR_FILENO, "Invalid args", 12), exit(EXIT_FAILURE));
-  symposium->time_to_eat = aux;
+    return (write(STDERR_FILENO, "Invalid args\n", 13), exit(EXIT_FAILURE));
+  common_args->time_to_eat = aux;
   aux = get_num(argv[4]);
   if (aux <= 0)
-    return (write(STDERR_FILENO, "Invalid args", 12), exit(EXIT_FAILURE));
-  symposium->time_to_sleep = aux;
+    return (write(STDERR_FILENO, "Invalid args\n", 13), exit(EXIT_FAILURE));
+  common_args->time_to_sleep = aux;
   if (argc == 6) {
     aux = get_num(argv[5]);
     if (aux <= 0)
-      return (write(STDERR_FILENO, "Invalid args", 12), exit(EXIT_FAILURE));
-    symposium->eat_n_times = aux;
+      return (write(STDERR_FILENO, "Invalid args\n", 13), exit(EXIT_FAILURE));
+    common_args->eat_n_times = aux;
   }
 }
 
-inline static void create_mutexs(t_symposium *symposium) {
+inline static void create_mutexs(t_philo_common *common_args) {
   int i;
 
   i = 0;
-  while (i < symposium->assistants) {
-    pthread_mutex_init(&(symposium->forks[i]), NULL);
+  while (i < common_args->assistants) {
+    // Creamos un mutex para cada tenedor
+    pthread_mutex_init(&(common_args->forks[i]), NULL);
     i++;
   }
-  pthread_mutex_init(&(symposium->kylix), NULL);
-  pthread_mutex_init(&(symposium->get_time), NULL);
+  // Creamos el mutex del kylix
+  pthread_mutex_init(&(common_args->kylix), NULL);
+  pthread_mutex_init(&(common_args->someone_died), NULL);
 }
 
-void start_philo_t(int argc, char **argv, t_symposium *symposium) {
-  symposium->eat_n_times = -1;
-  load_init_values(argc, argv, symposium);
-  symposium->forks = (pthread_mutex_t *)malloc(symposium->assistants *
-                                               sizeof(pthread_mutex_t));
-  if (!symposium->forks)
+void start_philo_t(int argc, char **argv, t_philo_common *common_args) {
+  common_args->eat_n_times = -1;
+  load_init_values(argc, argv, common_args);
+  common_args->forks = (pthread_mutex_t *)malloc(common_args->assistants *
+                                                 sizeof(pthread_mutex_t));
+  if (!common_args->forks)
     exit(EXIT_FAILURE);
-  create_mutexs(symposium);
+  create_mutexs(common_args);
+  common_args->someone_dead = 0;
 }

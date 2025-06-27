@@ -12,43 +12,40 @@
 
 #include "philosophers.h"
 
-static inline void	free_philo(t_symposium symposium,
-		t_philosopher *philosopher, pthread_t *philo_threads)
-{
-	int	i;
+static inline void free_philo(t_philo_common common_args,
+                              t_philo_single *philosopher,
+                              pthread_t *philo_threads) {
+  int i;
 
-	i = 0;
-	while (i < symposium.assistants)
-	{
-		pthread_mutex_destroy(&(philosopher[i].check_status));
-		pthread_mutex_destroy(&(philosopher[i].check_if_dead));
-		pthread_mutex_destroy(&(symposium.forks[i]));
-		i++;
-	}
-	pthread_mutex_destroy(&symposium.get_time);
-	pthread_mutex_destroy(&symposium.kylix);
-	free(symposium.forks);
-	free(philosopher);
-	free(philo_threads);
+  i = 0;
+  while (i < common_args.assistants) {
+    pthread_mutex_destroy(&(philosopher[i].check_if_alive));
+    pthread_mutex_destroy(&(philosopher[i].check_last_meal));
+    pthread_mutex_destroy(&(philosopher[i].check_n_meals));
+    pthread_mutex_destroy(&(common_args.forks[i]));
+    i++;
+  }
+  pthread_mutex_destroy(&common_args.kylix);
+  free(common_args.forks);
+  free(philosopher);
+  free(philo_threads);
 }
 
-int	main(int argc, char **argv)
-{
-	t_symposium		symposium;
-	t_philosopher	*philosophers;
-	pthread_t		*philo_threads;
-	int				i;
+int main(int argc, char **argv) {
+  t_philo_common common_args;
+  t_philo_single *philosophers;
+  pthread_t *philo_threads;
+  int i;
 
-	i = 0;
-	if (argc < 5 || argc > 6)
-		return (write(2, "Invalid arguments", 17), EXIT_FAILURE);
-	start_philo_t(argc, argv, &symposium);
-	create_philos(&symposium, &philosophers, &philo_threads);
-	launch_philo_monitor(philosophers);
-	while (i < symposium.assistants)
-	{
-		pthread_join(philo_threads[i], NULL);
-		i++;
-	}
-	free_philo(symposium, philosophers, philo_threads);
+  i = 0;
+  if (argc < 5 || argc > 6)
+    return (write(2, "Invalid arguments\n", 18), EXIT_FAILURE);
+  start_philo_t(argc, argv, &common_args);
+  create_philos(&common_args, &philosophers, &philo_threads);
+  launch_philo_monitor(philosophers);
+  while (i < common_args.assistants) {
+    pthread_join(philo_threads[i], NULL);
+    i++;
+  }
+  free_philo(common_args, philosophers, philo_threads);
 }

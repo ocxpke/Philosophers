@@ -12,39 +12,50 @@
 
 #include "philosophers.h"
 
-static inline int all_ended_eating(t_philosopher *all_philos) {
+static inline int all_ended_eating(t_philo_single *all_philos) {
   int ret;
   int i;
 
-  if (all_philos[0].eat_n_times == -1)
+  pthread_mutex_lock(&(all_philos[0].check_n_meals));
+  if (all_philos[0].eat_n_times == -1) {
+    pthread_mutex_unlock(&(all_philos[0].check_n_meals));
     return (1);
+  }
+  pthread_mutex_unlock(&(all_philos[0].check_n_meals));
   i = 0;
   ret = 0;
-  while (i < all_philos[0].assistants) {
+  while (i < all_philos[0].common_args->assistants) {
+    pthread_mutex_lock(&(all_philos[i].check_n_meals));
     if (all_philos[i].eat_n_times > 0)
       ret = 1;
+    pthread_mutex_unlock(&(all_philos[i].check_n_meals));
     i++;
   }
   return (ret);
 }
 
-static inline void check_philos_status(t_philosopher *all_philos, int *loop) {
+static inline void check_philos_status(t_philo_single *all_philos, int *loop) {
   int time_passed;
   int i;
 
   i = 0;
   *loop = all_ended_eating(all_philos);
-  while ((i < all_philos[0].assistants) && (*loop)) {
-    pthread_mutex_lock(&(all_philos[i].check_if_dead));
+  while ((i < all_philos[0].common_args->assistants) && (*loop)) {
+    pthread_mutex_lock(&(all_philos[i].check_last_meal));
     time_passed = (get_act_time() - all_philos[i].last_meal_time);
-    pthread_mutex_unlock(&(all_philos[i].check_if_dead));
-    if (time_passed > all_philos[i].time_to_die) {
-      pthread_mutex_lock(&(all_philos[i].check_status));
-      all_philos[i].exec = 0;
-      pthread_mutex_unlock(&(all_philos[i].check_status));
-      pthread_mutex_lock(&(all_philos[i].kylix));
-      printf("[%d] %d died\n", exec_time(&all_philos[i]), all_philos[i].id + 1);
-      //pthread_mutex_unlock(&(all_philos[i].kylix));
+    pthread_mutex_unlock(&(all_philos[i].check_last_meal));
+    if (time_passed > all_philos[i].common_args->time_to_die) {
+      pthread_mutex_lock(&(all_philos[i].common_args->someone_died));
+      all_philos[i].common_args->someone_dead = 1;
+      pthread_mutex_unlock(&(all_philos[i].common_args->someone_died));
+      pthread_mutex_lock(&(all_philos[i].check_if_alive));
+      all_philos[i].alive = 0;
+      pthread_mutex_unlock(&(all_philos[i].check_if_alive));
+      pthread_mutex_lock(&(all_philos[i].common_args->kylix));
+      printf("[%d] %d died\n",
+             get_act_time() - all_philos[i].common_args->epoch,
+             all_philos[i].id + 1);
+      pthread_mutex_unlock(&(all_philos[i].common_args->kylix));
       *loop = 0;
     }
     i++;
@@ -52,21 +63,23 @@ static inline void check_philos_status(t_philosopher *all_philos, int *loop) {
   usleep(100);
 }
 
-static inline void stop_running_philos(t_philosopher *all_philos) {
+static inline void stop_running_philos(t_philo_single *all_philos) {
   int i;
 
   i = 0;
-  while (i < all_philos[0].assistants) {
-    all_philos[i].exec = 0;
+  while (i < all_philos[0].common_args->assistants) {
+    pthread_mutex_lock(&(all_philos[i].check_if_alive));
+    all_philos[i].alive = 0;
+    pthread_mutex_unlock(&(all_philos[i].check_if_alive));
     i++;
   }
 }
 
 void *monitoring_philos(void *philos) {
-  t_philosopher *all_philos;
+  t_philo_single *all_philos;
   int loop;
 
-  all_philos = (t_philosopher *)philos;
+  all_philos = (t_philo_single *)philos;
   loop = 1;
   while (loop)
     check_philos_status(philos, &loop);
@@ -74,7 +87,7 @@ void *monitoring_philos(void *philos) {
   return (NULL);
 }
 
-void launch_philo_monitor(t_philosopher *philosophers) {
+void launch_philo_monitor(t_philo_single *philosophers) {
   pthread_t philo_monitor;
 
   pthread_create(&philo_monitor, NULL, monitoring_philos, philosophers);

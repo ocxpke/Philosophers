@@ -12,66 +12,59 @@
 
 #include "philosophers.h"
 
-inline int exec_time(t_philosopher *philo) {
-  int ret;
-
-  pthread_mutex_lock(&philo->get_time);
-  ret = get_act_time() - philo->init_time;
-  pthread_mutex_unlock(&philo->get_time);
-  return (ret);
+static inline void philo_says(t_philo_single *philo, char *message) {
+  pthread_mutex_lock(&(philo->check_if_alive));
+  if (philo->alive) {
+    pthread_mutex_unlock(&(philo->check_if_alive));
+    pthread_mutex_lock(&philo->common_args->kylix);
+    pthread_mutex_lock(&(philo->common_args->someone_died));
+    if (!philo->common_args->someone_dead)
+      printf("[%d] %d %s\n", get_act_time() - philo->common_args->epoch,
+             philo->id + 1, message);
+    pthread_mutex_unlock(&(philo->common_args->someone_died));
+    pthread_mutex_unlock(&philo->common_args->kylix);
+    return;
+  }
+  pthread_mutex_unlock(&(philo->check_if_alive));
 }
 
-static inline void philo_says(t_philosopher *philo, char *message) {
-  pthread_mutex_lock(&(philo->check_status));
-  if (philo->exec) {
-    pthread_mutex_unlock(&(philo->check_status));
-    pthread_mutex_lock(&philo->kylix);
-    printf("[%d] %d %s\n", exec_time(philo), philo->id + 1, message);
-    pthread_mutex_unlock(&philo->kylix);
-  } else
-    pthread_mutex_unlock(&(philo->check_status));
-}
-
-void philo_meal(t_philosopher *philo) {
+void philo_meal(t_philo_single *philo) {
   int first_to_take;
   int second_to_take;
 
   assing_order_forks(philo, &first_to_take, &second_to_take);
-  pthread_mutex_lock(&(philo->forks[first_to_take]));
+  pthread_mutex_lock(&(philo->common_args->forks[first_to_take]));
   philo_says(philo, "has taken a fork");
   if (philo->id == philo->id_left)
     return (wait_till_dead(philo));
-  pthread_mutex_lock(&(philo->forks[second_to_take]));
+  pthread_mutex_lock(&(philo->common_args->forks[second_to_take]));
   philo_says(philo, "has taken a fork");
   philo_says(philo, "is eating");
-  // Actualizar comida antes, despues, o 2 veces??
-  pthread_mutex_lock(&(philo->check_if_dead));
+  pthread_mutex_lock(&(philo->check_last_meal));
   philo->last_meal_time = get_act_time();
-  pthread_mutex_unlock(&(philo->check_if_dead));
-  ft_usleep(philo, philo->time_to_eat);
-  pthread_mutex_lock(&(philo->check_if_dead));
-  philo->last_meal_time = get_act_time();
-  pthread_mutex_unlock(&(philo->check_if_dead));
-  pthread_mutex_unlock(&(philo->forks[first_to_take]));
-  pthread_mutex_unlock(&(philo->forks[second_to_take]));
+  pthread_mutex_unlock(&(philo->check_last_meal));
+  ft_usleep(philo, philo->common_args->time_to_eat);
+  pthread_mutex_unlock(&(philo->common_args->forks[first_to_take]));
+  pthread_mutex_unlock(&(philo->common_args->forks[second_to_take]));
+  pthread_mutex_lock(&(philo->check_n_meals));
   if (philo->eat_n_times > 0)
     philo->eat_n_times--;
+  pthread_mutex_unlock(&(philo->check_n_meals));
 }
 
 void *philo_life(void *philo_info) {
-  t_philosopher *philo;
+  t_philo_single *philo;
 
-  philo = (t_philosopher *)philo_info;
-  philo->last_meal_time = get_act_time();
-  pthread_mutex_lock(&(philo->check_status));
-  while (philo->exec && (philo->eat_n_times != 0)) {
-    pthread_mutex_unlock(&(philo->check_status));
+  philo = (t_philo_single *)philo_info;
+  pthread_mutex_lock(&(philo->check_if_alive));
+  while (philo->alive && (philo->eat_n_times != 0)) {
+    pthread_mutex_unlock(&(philo->check_if_alive));
     philo_says(philo, "is thinking");
     philo_meal(philo);
     philo_says(philo, "is sleeping");
-    ft_usleep(philo, philo->time_to_sleep);
-    pthread_mutex_lock(&(philo->check_status));
+    ft_usleep(philo, philo->common_args->time_to_sleep);
+    pthread_mutex_lock(&(philo->check_if_alive));
   }
-  pthread_mutex_unlock(&(philo->check_status));
+  pthread_mutex_unlock(&(philo->check_if_alive));
   return (NULL);
 }

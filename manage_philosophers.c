@@ -12,75 +12,61 @@
 
 #include "philosophers.h"
 
-static inline void	free_on_error(t_symposium *symposium,
-		t_philosopher **philosophers, int c)
-{
-	free(symposium->forks);
-	if (c == 1)
-	{
-		free(*philosophers);
-		write(2, "Error allocating the memory needed for philo threads\n", 53);
-	}
-	else
-		write(2, "Error allocating the memory needed for philostructs\n", 52);
-	exit(EXIT_FAILURE);
+static inline void free_on_error(t_philo_common *common_args,
+                                 t_philo_single **philosophers, int c) {
+  free(common_args->forks);
+  if (c == 1) {
+    free(*philosophers);
+    write(2, "Error allocating the memory needed for philo threads\n", 53);
+  } else
+    write(2, "Error allocating the memory needed for philostructs\n", 52);
+  exit(EXIT_FAILURE);
 }
 
-static inline void	fill_philos(t_symposium *symposium,
-		t_philosopher *philosophers, int init_time)
-{
-	int	i;
+static inline void fill_philos(t_philo_common *common_args,
+                               t_philo_single *philosophers) {
+  int i;
 
-	i = 0;
-	while (i < symposium->assistants)
-	{
-		philosophers[i].id = i;
-		philosophers[i].id_left = ((i + 1) % symposium->assistants);
-		philosophers[i].forks = symposium->forks;
-		philosophers[i].kylix = symposium->kylix;
-		philosophers[i].time_to_die = symposium->time_to_die;
-		philosophers[i].time_to_eat = symposium->time_to_eat;
-		philosophers[i].time_to_sleep = symposium->time_to_sleep;
-		philosophers[i].eat_n_times = symposium->eat_n_times;
-		philosophers[i].init_time = init_time;
-		philosophers[i].last_meal_time = -1;
-		philosophers[i].exec = 1;
-		philosophers[i].assistants = symposium->assistants;
-		philosophers[i].get_time = symposium->get_time;
-		pthread_mutex_init(&(philosophers[i].check_status), NULL);
-		pthread_mutex_init(&(philosophers[i].check_if_dead), NULL);
-		i++;
-	}
+  i = 0;
+  while (i < common_args->assistants) {
+    philosophers[i].id = i;
+    philosophers[i].id_left = ((i + 1) % common_args->assistants);
+    philosophers[i].init_time = get_act_time();
+    philosophers[i].last_meal_time = philosophers[i].init_time;
+    philosophers[i].alive = 1;
+    philosophers[i].eat_n_times = common_args->eat_n_times;
+    philosophers[i].common_args = common_args;
+    pthread_mutex_init(&(philosophers[i].check_if_alive), NULL);
+    pthread_mutex_init(&(philosophers[i].check_last_meal), NULL);
+    pthread_mutex_init(&(philosophers[i].check_n_meals), NULL);
+    i++;
+  }
 }
 
-static inline void	run_philos(int assistants, t_philosopher *philosophers,
-		pthread_t *philo_threads)
-{
-	int	i;
+static inline void run_philos(t_philo_common *common_args,
+                              t_philo_single *philosophers,
+                              pthread_t *philo_threads) {
+  int i;
 
-	i = 0;
-	while (i < assistants)
-	{
-		pthread_create(&(philo_threads[i]), NULL, philo_life,
-			&(philosophers[i]));
-		i++;
-	}
+  i = 0;
+
+  common_args->epoch = get_act_time();
+  while (i < common_args->assistants) {
+    pthread_create(&(philo_threads[i]), NULL, philo_life, &(philosophers[i]));
+    i++;
+  }
 }
 
-void	create_philos(t_symposium *symposium, t_philosopher **philosophers,
-		pthread_t **philo_threads)
-{
-	int	init_time;
-
-	*philosophers = (t_philosopher *)malloc(symposium->assistants
-			* sizeof(t_philosopher));
-	if (!*philosophers)
-		free_on_error(symposium, philosophers, 0);
-	*philo_threads = (pthread_t *)malloc(symposium->assistants
-			* sizeof(pthread_t));
-	if (!*philo_threads)
-		free_on_error(symposium, philosophers, 1);
-	init_time = get_act_time();
-	fill_philos(symposium, *philosophers, init_time);
-	run_philos(symposium->assistants, *philosophers, *philo_threads);
+void create_philos(t_philo_common *common_args, t_philo_single **philosophers,
+                   pthread_t **philo_threads) {
+  *philosophers = (t_philo_single *)malloc(common_args->assistants *
+                                           sizeof(t_philo_single));
+  if (!*philosophers)
+    free_on_error(common_args, philosophers, 0);
+  *philo_threads =
+      (pthread_t *)malloc(common_args->assistants * sizeof(pthread_t));
+  if (!*philo_threads)
+    free_on_error(common_args, philosophers, 1);
+  fill_philos(common_args, *philosophers);
+  run_philos(common_args, *philosophers, *philo_threads);
 }

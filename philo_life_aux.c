@@ -12,21 +12,18 @@
 
 #include "philosophers.h"
 
-inline void	assing_order_forks(t_philosopher *philo, int *first_to_take,
-		int *second_to_take)
-{
-	*first_to_take = philo->id;
-	*second_to_take = philo->id_left;
-	if ((philo->id % 2) != 0)
-	{
-		*first_to_take = philo->id_left;
-		*second_to_take = philo->id;
-	}
+inline void assing_order_forks(t_philo_single *philo, int *first_to_take,
+                               int *second_to_take) {
+  *first_to_take = philo->id;
+  *second_to_take = philo->id_left;
+  if ((philo->id % 2) != 0) {
+    *first_to_take = philo->id_left;
+    *second_to_take = philo->id;
+  }
 }
 
-inline void	wait_till_dead(t_philosopher *philo)
-{
-	pthread_mutex_unlock(&(philo->forks[philo->id]));
-	while (philo->exec)
-		usleep(1000);
+inline void wait_till_dead(t_philo_single *philo) {
+  pthread_mutex_unlock(&(philo->common_args->forks[philo->id]));
+  while (philo->alive)
+    ft_usleep(philo, philo->common_args->time_to_die);
 }
