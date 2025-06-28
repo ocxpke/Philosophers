@@ -13,8 +13,12 @@
 #include "philosophers.h"
 
 static inline int check_all_num(char *arg) {
+  if (!arg)
+    return (0);
   int ret = 1;
   int i = 0;
+  if (arg[0] == '+' || arg[0] == '-')
+    i++;
   while ((i < ft_strlen(arg)) && ret) {
     if (!ft_isdigit(arg[i]))
       ret = 0;

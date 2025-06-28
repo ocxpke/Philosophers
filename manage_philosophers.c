@@ -33,12 +33,12 @@ static inline void fill_philos(t_philo_common *common_args,
     philosophers[i].id_left = ((i + 1) % common_args->assistants);
     philosophers[i].init_time = get_act_time();
     philosophers[i].last_meal_time = philosophers[i].init_time;
-    philosophers[i].alive = 1;
     philosophers[i].eat_n_times = common_args->eat_n_times;
-    philosophers[i].common_args = common_args;
+    philosophers[i].alive = 1;
     pthread_mutex_init(&(philosophers[i].check_if_alive), NULL);
     pthread_mutex_init(&(philosophers[i].check_last_meal), NULL);
     pthread_mutex_init(&(philosophers[i].check_n_meals), NULL);
+    philosophers[i].common_args = common_args;
     i++;
   }
 }

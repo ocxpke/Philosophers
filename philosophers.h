@@ -59,7 +59,7 @@ void create_philos(t_philo_common *common_args, t_philo_single **philosophers,
 void ft_usleep(t_philo_single *philo, int time_to_wait);
 int get_act_time(void);
 void *philo_life(void *philo_info);
-void assing_order_forks(t_philo_single *philo, int *first_to_take,
+void assign_order_forks(t_philo_single *philo, int *first_to_take,
                         int *second_to_take);
 void wait_till_dead(t_philo_single *philo);
 

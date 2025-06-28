@@ -90,6 +90,7 @@ void *monitoring_philos(void *philos) {
 void launch_philo_monitor(t_philo_single *philosophers) {
   pthread_t philo_monitor;
 
+  usleep(philosophers->common_args->time_to_die);
   pthread_create(&philo_monitor, NULL, monitoring_philos, philosophers);
   pthread_detach(philo_monitor);
 }

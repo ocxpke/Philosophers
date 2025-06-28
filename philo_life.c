@@ -32,7 +32,7 @@ void philo_meal(t_philo_single *philo) {
   int first_to_take;
   int second_to_take;
 
-  assing_order_forks(philo, &first_to_take, &second_to_take);
+  assign_order_forks(philo, &first_to_take, &second_to_take);
   pthread_mutex_lock(&(philo->common_args->forks[first_to_take]));
   philo_says(philo, "has taken a fork");
   if (philo->id == philo->id_left)
@@ -56,6 +56,9 @@ void *philo_life(void *philo_info) {
   t_philo_single *philo;
 
   philo = (t_philo_single *)philo_info;
+  pthread_mutex_lock(&(philo->check_last_meal));
+  philo->last_meal_time = get_act_time();
+  pthread_mutex_unlock(&(philo->check_last_meal));
   pthread_mutex_lock(&(philo->check_if_alive));
   while (philo->alive && (philo->eat_n_times != 0)) {
     pthread_mutex_unlock(&(philo->check_if_alive));
