@@ -20,6 +20,7 @@
 #include <string.h>
 #include <sys/time.h>
 #include <unistd.h>
+#include "colors.h"
 
 typedef struct s_philo_common {
   pthread_mutex_t *forks;

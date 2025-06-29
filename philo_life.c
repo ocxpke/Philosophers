@@ -12,6 +12,25 @@
 
 #include "philosophers.h"
 
+static inline void colored_print(t_philo_single *philo, char *message) {
+  char *color;
+  if ((philo->id % 6) == 0) {
+    color = ANSI_CYAN;
+  } else if ((philo->id % 6) == 1) {
+    color = ANSI_RED;
+  } else if ((philo->id % 6) == 2) {
+    color = ANSI_GREEN;
+  } else if ((philo->id % 6) == 3) {
+    color = ANSI_YELLOW;
+  } else if ((philo->id % 6) == 4) {
+    color = ANSI_BLUE;
+  } else {
+    color = ANSI_MAGENTA;
+  }
+  printf("[%d] %s%d %s%s\n", get_act_time() - philo->common_args->epoch, color,
+         philo->id + 1, message, ANSI_RESET);
+}
+
 static inline void philo_says(t_philo_single *philo, char *message) {
   pthread_mutex_lock(&(philo->check_if_alive));
   if (philo->alive) {
@@ -19,8 +38,7 @@ static inline void philo_says(t_philo_single *philo, char *message) {
     pthread_mutex_lock(&philo->common_args->kylix);
     pthread_mutex_lock(&(philo->common_args->someone_died));
     if (!philo->common_args->someone_dead)
-      printf("[%d] %d %s\n", get_act_time() - philo->common_args->epoch,
-             philo->id + 1, message);
+      colored_print(philo, message);
     pthread_mutex_unlock(&(philo->common_args->someone_died));
     pthread_mutex_unlock(&philo->common_args->kylix);
     return;
