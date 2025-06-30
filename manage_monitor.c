@@ -52,15 +52,15 @@ static inline void check_philos_status(t_philo_single *all_philos, int *loop) {
       all_philos[i].alive = 0;
       pthread_mutex_unlock(&(all_philos[i].check_if_alive));
       pthread_mutex_lock(&(all_philos[i].common_args->kylix));
-      printf("[%d] %d died\n",
-             get_act_time() - all_philos[i].common_args->epoch,
-             all_philos[i].id + 1);
+      printf("[%d] %s%d died%s\n",
+             get_act_time() - all_philos[i].common_args->epoch, ANSI_BG_BRED,
+             all_philos[i].id + 1, ANSI_RESET);
       pthread_mutex_unlock(&(all_philos[i].common_args->kylix));
       *loop = 0;
     }
     i++;
   }
-  usleep(100);
+  usleep((all_philos[0].common_args->time_to_die * 1000) / 2);
 }
 
 static inline void stop_running_philos(t_philo_single *all_philos) {
@@ -90,7 +90,6 @@ void *monitoring_philos(void *philos) {
 void launch_philo_monitor(t_philo_single *philosophers) {
   pthread_t philo_monitor;
 
-  usleep(philosophers->common_args->time_to_die);
   pthread_create(&philo_monitor, NULL, monitoring_philos, philosophers);
   pthread_detach(philo_monitor);
 }
