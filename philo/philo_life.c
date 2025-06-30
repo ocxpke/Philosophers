@@ -74,18 +74,19 @@ void *philo_life(void *philo_info) {
   t_philo_single *philo;
 
   philo = (t_philo_single *)philo_info;
-  pthread_mutex_lock(&(philo->check_last_meal));
-  philo->last_meal_time = get_act_time();
-  pthread_mutex_unlock(&(philo->check_last_meal));
   pthread_mutex_lock(&(philo->check_if_alive));
+  pthread_mutex_lock(&(philo->check_n_meals));
   while (philo->alive && (philo->eat_n_times != 0)) {
     pthread_mutex_unlock(&(philo->check_if_alive));
+    pthread_mutex_unlock(&(philo->check_n_meals));
     philo_says(philo, "is thinking");
     philo_meal(philo);
     philo_says(philo, "is sleeping");
     ft_usleep(philo, philo->common_args->time_to_sleep);
     pthread_mutex_lock(&(philo->check_if_alive));
+    pthread_mutex_lock(&(philo->check_n_meals));
   }
   pthread_mutex_unlock(&(philo->check_if_alive));
+  pthread_mutex_unlock(&(philo->check_n_meals));
   return (NULL);
 }

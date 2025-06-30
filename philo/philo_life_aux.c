@@ -13,7 +13,7 @@
 #include "philosophers.h"
 
 /*
-inline void assing_order_forks(t_philo_single *philo, int *first_to_take,
+inline void assign_order_forks(t_philo_single *philo, int *first_to_take,
                                int *second_to_take) {
   *first_to_take = philo->id;
   *second_to_take = philo->id_left;
@@ -28,7 +28,6 @@ inline void assign_order_forks(t_philo_single *philo, int *first_fork,
   int left_fork = philo->id;
   int right_fork = (philo->id + 1) % philo->common_args->assistants;
 
-  // SIEMPRE tomar primero el fork con ID menor
   if (left_fork < right_fork) {
     *first_fork = left_fork;
     *second_fork = right_fork;

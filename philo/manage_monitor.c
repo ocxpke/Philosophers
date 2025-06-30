@@ -68,7 +68,7 @@ static inline void check_philos_status(t_philo_single *all_philos, int *loop) {
     }
     i++;
   }
-  usleep((all_philos[0].common_args->time_to_die * 1000) / 2);
+  usleep(1000);
 }
 
 static inline void stop_running_philos(t_philo_single *all_philos) {

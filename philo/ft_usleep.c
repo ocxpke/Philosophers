@@ -25,7 +25,7 @@ inline void ft_usleep(t_philo_single *philo, int time_to_wait) {
   pthread_mutex_lock(&(philo->check_if_alive));
   while (((get_act_time() - init_time) < time_to_wait) && (philo->alive)) {
     pthread_mutex_unlock(&(philo->check_if_alive));
-    usleep(((time_to_wait * 1000) / 4));
+    usleep((time_to_wait * 1000) / 2);
     pthread_mutex_lock(&(philo->check_if_alive));
   }
   pthread_mutex_unlock(&(philo->check_if_alive));
