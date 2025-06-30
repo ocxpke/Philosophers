@@ -10,12 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philosopher_bonus.h"
 
-inline int	get_act_time(void)
-{
-	struct timeval	time;
+inline int get_act_time(void) {
+  struct timeval time;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+  gettimeofday(&time, NULL);
+  return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }

@@ -37,26 +37,34 @@ static inline int all_ended_eating(t_philo_single *all_philos) {
 static inline void check_philos_status(t_philo_single *all_philos, int *loop) {
   int time_passed;
   int i;
+  int jump;
 
   i = 0;
   *loop = all_ended_eating(all_philos);
   while ((i < all_philos[0].common_args->assistants) && (*loop)) {
-    pthread_mutex_lock(&(all_philos[i].check_last_meal));
-    time_passed = (get_act_time() - all_philos[i].last_meal_time);
-    pthread_mutex_unlock(&(all_philos[i].check_last_meal));
-    if (time_passed > all_philos[i].common_args->time_to_die) {
-      pthread_mutex_lock(&(all_philos[i].common_args->someone_died));
-      all_philos[i].common_args->someone_dead = 1;
-      pthread_mutex_unlock(&(all_philos[i].common_args->someone_died));
-      pthread_mutex_lock(&(all_philos[i].check_if_alive));
-      all_philos[i].alive = 0;
-      pthread_mutex_unlock(&(all_philos[i].check_if_alive));
-      pthread_mutex_lock(&(all_philos[i].common_args->kylix));
-      printf("[%d] %s%d died%s\n",
-             get_act_time() - all_philos[i].common_args->epoch, ANSI_BG_BRED,
-             all_philos[i].id + 1, ANSI_RESET);
-      pthread_mutex_unlock(&(all_philos[i].common_args->kylix));
-      *loop = 0;
+    jump = 0;
+    pthread_mutex_lock(&(all_philos[i].check_n_meals));
+    if (all_philos[i].eat_n_times == 0)
+      jump = 1;
+    pthread_mutex_unlock(&(all_philos[i].check_n_meals));
+    if (!jump) {
+      pthread_mutex_lock(&(all_philos[i].check_last_meal));
+      time_passed = (get_act_time() - all_philos[i].last_meal_time);
+      pthread_mutex_unlock(&(all_philos[i].check_last_meal));
+      if (time_passed > all_philos[i].common_args->time_to_die) {
+        pthread_mutex_lock(&(all_philos[i].common_args->someone_died));
+        all_philos[i].common_args->someone_dead = 1;
+        pthread_mutex_unlock(&(all_philos[i].common_args->someone_died));
+        pthread_mutex_lock(&(all_philos[i].check_if_alive));
+        all_philos[i].alive = 0;
+        pthread_mutex_unlock(&(all_philos[i].check_if_alive));
+        pthread_mutex_lock(&(all_philos[i].common_args->kylix));
+        printf("[%d] %s%d died%s\n",
+               get_act_time() - all_philos[i].common_args->epoch, ANSI_BG_BRED,
+               all_philos[i].id + 1, ANSI_RESET);
+        pthread_mutex_unlock(&(all_philos[i].common_args->kylix));
+        *loop = 0;
+      }
     }
     i++;
   }
