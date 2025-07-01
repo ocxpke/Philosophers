@@ -8,13 +8,14 @@ SRC = philosophers.c \
 	philo_life.c\
 	manage_args.c\
 	manage_time.c\
+	monitor_aux.c\
 	manage_monitor.c\
 	philo_life_aux.c\
 	manage_philosophers.c\
 
 OBJS = $(SRC:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror -O3
+FLAGS = -Wall -Wextra -Werror -g -O3
 
 all: $(NAME)
 
