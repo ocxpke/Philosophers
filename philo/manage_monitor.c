@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 18:06:07 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:12:05 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,7 @@ static inline void	check_philos_status(t_philo_single *all_philos, int *loop)
 			time_passed = (get_act_time() - all_philos[i].last_meal_time);
 			pthread_mutex_unlock(&(all_philos[i].check_last_meal));
 			if (time_passed > all_philos[i].common_args->time_to_die)
-			{
 				someone_has_died(all_philos, loop, i);
-				/*
-				pthread_mutex_lock(&(all_philos[i].common_args->someone_died));
-				all_philos[i].common_args->someone_dead = 1;
-				pthread_mutex_unlock(&(all_philos[i].common_args->someone_died));
-				pthread_mutex_lock(&(all_philos[i].check_if_alive));
-				all_philos[i].alive = 0;
-				pthread_mutex_unlock(&(all_philos[i].check_if_alive));
-				pthread_mutex_lock(&(all_philos[i].common_args->kylix));
-				printf("[%d] %s%d died%s\n", get_act_time()
-					- all_philos[i].common_args->epoch, ANSI_BG_BRED,
-					all_philos[i].id + 1, ANSI_RESET);
-				pthread_mutex_unlock(&(all_philos[i].common_args->kylix));
-				*loop = 0;
-				*/
-			}
 		}
 		i++;
 	}
