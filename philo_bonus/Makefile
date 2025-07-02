@@ -1,15 +1,14 @@
-NAME = philo
+NAME = philo_bonus
 
-SRC = philosophers.c \
+SRC = philosopher_bonus.c \
+	ft_itoa.c\
 	philo_aux.c\
 	ft_usleep.c\
 	philo_life.c\
 	manage_args.c\
 	manage_time.c\
-	monitor_aux.c\
-	manage_monitor.c\
-	philo_life_aux.c\
-	manage_philosophers.c\
+	manage_philos.c\
+	philo_life_aux.c
 
 OBJS = $(SRC:.c=.o)
 

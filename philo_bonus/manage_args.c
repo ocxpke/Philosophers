@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:56:17 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 19:52:39 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/02 11:13:50 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,27 @@ static inline void	load_init_values(int argc, char **argv,
 	}
 }
 
-void	start_philo_bonus_t(int argc, char **argv,
+static void	create_common_semaphores(t_philo_bonus_common *common_args)
+{
+	common_args->sem_forks = sem_open("/forks", O_CREAT, 0660,
+			common_args->assistants);
+	if (!common_args->sem_forks)
+		return (write(2, "Err creating sem forks\n", 23), exit(EXIT_FAILURE));
+	sem_unlink("/forks");
+	common_args->at_least_pair = sem_open("/pair_forks", O_CREAT, 0660, 1);
+	if (!common_args->sem_forks)
+		return (write(2, "Err creating pair forks\n", 24), exit(EXIT_FAILURE));
+	sem_unlink("/pair_forks");
+	common_args->kylix = sem_open("/kylix", O_CREAT, 0660, 1);
+	if (!common_args->sem_forks)
+		return (write(2, "Err creating pair forks\n", 24), exit(EXIT_FAILURE));
+	sem_unlink("/kylix");
+}
+
+void	start_philo_bonus_common_t(int argc, char **argv,
 		t_philo_bonus_common *common_args)
 {
 	common_args->eat_n_times = -1;
 	load_init_values(argc, argv, common_args);
+	create_common_semaphores(common_args);
 }
