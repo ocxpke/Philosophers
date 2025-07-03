@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 11:30:44 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/02 14:51:39 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/03 21:02:17 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ static inline void	colored_print(t_philo_bonus_common *common_args,
 static inline void	philo_says(t_philo_bonus_common *common_args, char *message,
 		int id)
 {
+	int	ret;
+
+	sem_wait(common_args->check_someone_died);
+	ret = common_args->someone_dead;
+	sem_post(common_args->check_someone_died);
+	if (ret)
+		return ;
 	sem_wait(common_args->kylix);
 	colored_print(common_args, message, id);
 	sem_post(common_args->kylix);
@@ -65,24 +72,17 @@ static inline void	philo_meal(t_philo_bonus_common *common_args,
 
 int	init_philo_indi_sem(t_philo_bonus_individual *philo_stats)
 {
-	char	name_check_alive[20];
 	char	name_check_n_meals[22];
 	char	n_check_l_meal[24];
 
-	set_names_sem_philos_indi(philo_stats, name_check_alive, name_check_n_meals,
-		n_check_l_meal);
-	philo_stats->check_alive = sem_open(name_check_alive, O_CREAT, 0660, 1);
-	if (!philo_stats->check_alive)
-		return (1);
-	sem_unlink(name_check_alive);
+	set_names_sem_philos_indi(name_check_n_meals, n_check_l_meal, philo_stats);
 	philo_stats->check_n_meals = sem_open(name_check_n_meals, O_CREAT, 0660, 1);
 	if (!philo_stats->check_n_meals)
-		return (sem_close(philo_stats->check_alive), 1);
+		return (1);
 	sem_unlink(name_check_n_meals);
 	philo_stats->check_last_meal = sem_open(n_check_l_meal, O_CREAT, 0660, 1);
 	if (!philo_stats->check_last_meal)
-		return (sem_close(philo_stats->check_alive),
-			sem_close(philo_stats->check_n_meals), 1);
+		return (sem_close(philo_stats->check_n_meals), 1);
 	sem_unlink(n_check_l_meal);
 	return (0);
 }
@@ -90,24 +90,27 @@ int	init_philo_indi_sem(t_philo_bonus_individual *philo_stats)
 void	philo_life(t_philo_bonus_common *common_args, int id)
 {
 	t_philo_bonus_individual	philo_stats;
+	pthread_t					monitor;
 
 	init_philo_struct(common_args, &philo_stats, id);
-	sem_wait(philo_stats.check_alive);
+	launch_philo_monitor(&monitor, &philo_stats);
+	sem_wait(philo_stats.common_args->check_someone_died);
 	sem_wait(philo_stats.check_n_meals);
-	while (philo_stats.alive && (philo_stats.eat_n_times != 0))
+	while ((!philo_stats.common_args->someone_dead)
+		&& (philo_stats.eat_n_times != 0))
 	{
-		sem_post(philo_stats.check_alive);
+		sem_post(philo_stats.common_args->check_someone_died);
 		sem_post(philo_stats.check_n_meals);
 		philo_says(common_args, "is thinking", philo_stats.id);
 		philo_meal(common_args, &philo_stats);
 		philo_says(common_args, "is sleeping", philo_stats.id);
 		ft_usleep(common_args->time_to_sleep);
-		sem_wait(philo_stats.check_alive);
+		sem_wait(philo_stats.common_args->check_someone_died);
 		sem_wait(philo_stats.check_n_meals);
 	}
-	sem_post(philo_stats.check_alive);
+	sem_post(philo_stats.common_args->check_someone_died);
 	sem_post(philo_stats.check_n_meals);
-	sem_close(philo_stats.check_alive);
+	pthread_join(monitor, NULL);
 	sem_close(philo_stats.check_n_meals);
 	sem_close(philo_stats.check_last_meal);
 }
