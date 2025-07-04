@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_usleep.c                                        :+:      :+:    :+:   */
+/*   manage_reaper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/02 11:43:45 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/04 15:23:24 by jose-ara         ###   ########.fr       */
+/*   Created: 2025/07/04 13:02:28 by jose-ara          #+#    #+#             */
+/*   Updated: 2025/07/04 15:30:38 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-void	ft_usleep(t_philo_bonus_individual *philo_stats, int time)
+void	*reaper_life(void *philo_things)
 {
-	int	init;
+	t_philo_bonus_individual	*philo_stats;
 
-	init = get_act_time();
+	philo_stats = (t_philo_bonus_individual *)philo_things;
+	sem_wait(philo_stats->common_args->death);
 	sem_wait(philo_stats->check_alive);
-	while (philo_stats->alive && ((get_act_time() - init) < time))
-	{
-		sem_post(philo_stats->check_alive);
-		usleep((time * 1000) / 4);
-		sem_wait(philo_stats->check_alive);
-	}
+	philo_stats->alive = 0;
 	sem_post(philo_stats->check_alive);
+	sem_post(philo_stats->common_args->death);
+	return (NULL);
+}
+
+void	launch_reaper(pthread_t *reaper, t_philo_bonus_individual *philo_stats)
+{
+	pthread_create(reaper, NULL, reaper_life, (void *)philo_stats);
 }

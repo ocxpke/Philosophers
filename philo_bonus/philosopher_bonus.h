@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:43:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/03 20:37:45 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:44:27 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,10 @@ typedef struct s_philo_bonus_common
 	int						eat_n_times;
 	int						assistants;
 	int						epoch;
-	int						someone_dead;
 	sem_t					*kylix;
 	sem_t					*sem_forks;
 	sem_t					*at_least_pair;
-	sem_t					*check_someone_died;
+	sem_t					*death;
 }							t_philo_bonus_common;
 
 typedef struct s_philo_bonus_individual
@@ -45,7 +44,9 @@ typedef struct s_philo_bonus_individual
 	int						id;
 	int						last_meal_time;
 	int						eat_n_times;
+	int						alive;
 	sem_t					*check_last_meal;
+	sem_t					*check_alive;
 	sem_t					*check_n_meals;
 	t_philo_bonus_common	*common_args;
 }							t_philo_bonus_individual;
@@ -63,10 +64,12 @@ void						start_philo_bonus_individual_t(pid_t **all_pids,
 								t_philo_bonus_common *common_args);
 void						free_philo_bonus(t_philo_bonus_common *common_args,
 								pid_t **all_pids);
-void						ft_usleep(int time);
+void						ft_usleep(t_philo_bonus_individual *philo_stats,
+								int time);
 char						*ft_itoa(int n);
 
-void						set_names_sem_philos_indi(char *name_check_n_meals,
+void						set_names_sem_philos_indi(char *name_check_alive,
+								char *name_check_n_meals,
 								char *name_check_last_meal,
 								t_philo_bonus_individual *philo_stats);
 
@@ -79,4 +82,13 @@ int							init_philo_indi_sem(t_philo_bonus_individual *p_st);
 
 void						launch_philo_monitor(pthread_t *monitor,
 								t_philo_bonus_individual *philo_stats);
+
+void						launch_reaper(pthread_t *reaper,
+								t_philo_bonus_individual *philo_stats);
+
+void						philo_routine(t_philo_bonus_individual *p_st);
+
+void						philo_says(t_philo_bonus_individual *philo_stats,
+								char *message, int id);
+void						philo_meal(t_philo_bonus_individual *philo_stats);
 #endif
