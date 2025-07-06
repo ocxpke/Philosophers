@@ -7,6 +7,7 @@ SRC = philosopher_bonus.c \
 	philo_life.c\
 	manage_args.c\
 	manage_time.c\
+	main_monitors.c\
 	manage_philos.c\
 	manage_reaper.c\
 	manage_monitor.c\

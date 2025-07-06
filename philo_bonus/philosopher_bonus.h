@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 19:43:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/04 15:44:27 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/06 13:54:20 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philo_bonus_common
 	sem_t					*sem_forks;
 	sem_t					*at_least_pair;
 	sem_t					*death;
+	sem_t					*n_meals;
 	sem_t					**destroyer_of_worlds;
 }							t_philo_bonus_common;
 
@@ -92,4 +93,8 @@ void						philo_routine(t_philo_bonus_individual *p_st);
 void						philo_says(t_philo_bonus_individual *philo_stats,
 								char *message, int id);
 void						philo_meal(t_philo_bonus_individual *philo_stats);
+
+void						launch_main_monitors(pthread_t *monitor_death,
+								pthread_t *monitor_meals,
+								t_philo_bonus_common *common_args);
 #endif

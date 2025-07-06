@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 11:30:44 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/04 15:56:10 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/06 14:28:28 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,11 @@ static inline void	colored_print(t_philo_bonus_individual *philo_stats,
 inline void	philo_says(t_philo_bonus_individual *philo_stats, char *message,
 		int id)
 {
-	int	ret;
-
-	sem_wait(philo_stats->check_alive);
-	ret = philo_stats->alive;
-	sem_post(philo_stats->check_alive);
-	if (!ret)
-		return ;
 	sem_wait(philo_stats->common_args->kylix);
-	colored_print(philo_stats, message, id);
+	sem_wait(philo_stats->check_alive);
+	if (philo_stats->alive)
+		colored_print(philo_stats, message, id);
+	sem_post(philo_stats->check_alive);
 	sem_post(philo_stats->common_args->kylix);
 }
 
@@ -56,7 +52,8 @@ inline void	philo_meal(t_philo_bonus_individual *philo_stats)
 	if (philo_stats->common_args->assistants == 1)
 		return (sem_post(philo_stats->common_args->sem_forks),
 			sem_post(philo_stats->common_args->sem_forks),
-			ft_usleep(philo_stats, philo_stats->common_args->time_to_die + 1000));
+			ft_usleep(philo_stats, philo_stats->common_args->time_to_die
+				+ 1000));
 	sem_wait(philo_stats->common_args->sem_forks);
 	philo_says(philo_stats, "has taken a fork", philo_stats->id);
 	sem_post(philo_stats->common_args->at_least_pair);

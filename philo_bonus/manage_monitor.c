@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 20:11:06 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/04 15:50:08 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/06 13:57:27 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	check_last_meal(t_philo_bonus_individual *philo_stats)
 void	*monitor_life(void *philo_things)
 {
 	t_philo_bonus_individual	*philo_stats;
-	int wait;
+	int							wait;
 
 	philo_stats = (t_philo_bonus_individual *)philo_things;
 	sem_wait(philo_stats->check_alive);
@@ -53,8 +53,9 @@ void	*monitor_life(void *philo_things)
 	wait = (philo_stats->eat_n_times == 0);
 	sem_post(philo_stats->check_n_meals);
 	if (wait)
-		usleep((philo_stats->common_args->time_to_eat + philo_stats->common_args->time_to_eat) * (philo_stats->common_args->assistants / 2));
-	sem_post(philo_stats->common_args->death);
+		sem_post(philo_stats->common_args->n_meals);
+	else
+		sem_post(philo_stats->common_args->death);
 	return (NULL);
 }
 
