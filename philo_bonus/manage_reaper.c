@@ -17,11 +17,10 @@ void	*reaper_life(void *philo_things)
 	t_philo_bonus_individual	*philo_stats;
 
 	philo_stats = (t_philo_bonus_individual *)philo_things;
-	sem_wait(philo_stats->common_args->death);
+	sem_wait(philo_stats->common_args->destroyer_of_worlds[philo_stats->id]);
 	sem_wait(philo_stats->check_alive);
 	philo_stats->alive = 0;
 	sem_post(philo_stats->check_alive);
-	sem_post(philo_stats->common_args->death);
 	return (NULL);
 }
 

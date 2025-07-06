@@ -29,13 +29,13 @@ void	check_last_meal(t_philo_bonus_individual *philo_stats)
 			- philo_stats->common_args->epoch, ANSI_BG_RED, philo_stats->id + 1,
 			ANSI_RESET);
 		sem_post(philo_stats->common_args->kylix);
-		sem_post(philo_stats->common_args->death);
 	}
 }
 
 void	*monitor_life(void *philo_things)
 {
 	t_philo_bonus_individual	*philo_stats;
+	int wait;
 
 	philo_stats = (t_philo_bonus_individual *)philo_things;
 	sem_wait(philo_stats->check_alive);
@@ -50,7 +50,11 @@ void	*monitor_life(void *philo_things)
 		sem_wait(philo_stats->check_n_meals);
 	}
 	sem_post(philo_stats->check_alive);
+	wait = (philo_stats->eat_n_times == 0);
 	sem_post(philo_stats->check_n_meals);
+	if (wait)
+		usleep((philo_stats->common_args->time_to_eat + philo_stats->common_args->time_to_eat) * (philo_stats->common_args->assistants / 2));
+	sem_post(philo_stats->common_args->death);
 	return (NULL);
 }
 

@@ -37,6 +37,7 @@ typedef struct s_philo_bonus_common
 	sem_t					*sem_forks;
 	sem_t					*at_least_pair;
 	sem_t					*death;
+	sem_t					**destroyer_of_worlds;
 }							t_philo_bonus_common;
 
 typedef struct s_philo_bonus_individual

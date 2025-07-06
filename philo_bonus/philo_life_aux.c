@@ -19,9 +19,9 @@ void	set_names_sem_philos_indi(char *name_check_alive,
 	char	*str_id;
 
 	str_id = ft_itoa(philo_stats->id);
-	ft_bzero((void *)name_check_alive, 20);
-	ft_bzero((void *)name_check_n_meals, 22);
-	ft_bzero((void *)name_check_last_meal, 24);
+	ft_bzero((void *)name_check_alive, 256);
+	ft_bzero((void *)name_check_n_meals, 256);
+	ft_bzero((void *)name_check_last_meal, 256);
 	ft_strlcat(name_check_alive, "/philo_sem_alive_",
 		ft_strlen("/philo_sem_alive_"));
 	ft_strlcat(name_check_alive, str_id, ft_strlen(str_id));

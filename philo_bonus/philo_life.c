@@ -75,9 +75,9 @@ inline void	philo_meal(t_philo_bonus_individual *philo_stats)
 
 int	init_philo_indi_sem(t_philo_bonus_individual *philo_stats)
 {
-	char	name_check_alive[20];
-	char	name_check_n_meals[22];
-	char	n_check_l_meal[24];
+	char	name_check_alive[256];
+	char	name_check_n_meals[256];
+	char	n_check_l_meal[256];
 
 	set_names_sem_philos_indi(name_check_alive, name_check_n_meals,
 		n_check_l_meal, philo_stats);
