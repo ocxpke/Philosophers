@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 12:45:31 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/04 15:44:51 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 12:40:12 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init_philo_struct(t_philo_bonus_common *common_args,
 {
 	philo_stats->id = id;
 	if (init_philo_indi_sem(philo_stats) == 1)
-		return ;// Arreglar esta mierda
+		exit(EXIT_FAILURE);
 	philo_stats->alive = 1;
 	philo_stats->last_meal_time = get_act_time();
 	philo_stats->eat_n_times = common_args->eat_n_times;

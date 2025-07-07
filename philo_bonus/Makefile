@@ -7,11 +7,13 @@ SRC = philosopher_bonus.c \
 	philo_life.c\
 	manage_args.c\
 	manage_time.c\
+	close_helper.c\
 	main_monitors.c\
 	manage_philos.c\
 	manage_reaper.c\
 	manage_monitor.c\
-	philo_life_aux.c
+	philo_life_aux.c\
+	manage_args_aux.c
 
 OBJS = $(SRC:.c=.o)
 

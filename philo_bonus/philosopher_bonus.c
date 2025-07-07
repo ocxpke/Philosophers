@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 18:11:15 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/06 14:26:50 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 13:10:36 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,17 @@ void	free_philo_bonus(t_philo_bonus_common *common_args, pid_t **all_pids)
 	*all_pids = NULL;
 }
 
-void	process_finalizer(pid_t *all_pids, t_philo_bonus_common *common_args)
+/**
+
+ * @brief Sends a signal to all process that are waiting to end.
+   Also waits for them to end.
+ *
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @param all_pids Array of all pid_t from all process created.
+ * @return Void.
+ */
+static void	process_finalizer(pid_t *all_pids,
+		t_philo_bonus_common *common_args)
 {
 	int	i;
 
@@ -51,8 +61,6 @@ void	process_finalizer(pid_t *all_pids, t_philo_bonus_common *common_args)
 	}
 }
 
-// Hacer que el main espere el ppost por parte de un subproceso,
-// entonces hacer limpieza y por ultimo el wait pid de todos los hijos, testear
 int	main(int argc, char **argv)
 {
 	t_philo_bonus_common	common_args;

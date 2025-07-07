@@ -6,12 +6,20 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 11:30:44 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/06 14:28:28 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 13:36:36 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
+/**
+ * @brief Selects the color associated to philo by his ID.
+ *
+ * @param philo_stats Individual data from every philosopher
+ * @param message Message to be printed by philosopher.
+ * @param id The ID of the philosopher.
+ * @return Void
+ */
 static inline void	colored_print(t_philo_bonus_individual *philo_stats,
 		char *message, int id)
 {

@@ -6,13 +6,20 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 20:11:06 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/06 13:57:27 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 13:58:30 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
-void	check_last_meal(t_philo_bonus_individual *philo_stats)
+/**
+ * @brief Checks if philo died of starvation
+ *
+ * @param philo_stats Philo individual structure that contains all
+ * the necesary data
+ * @return Void
+ */
+static void	check_last_meal(t_philo_bonus_individual *philo_stats)
 {
 	int	time_passed;
 
@@ -32,7 +39,15 @@ void	check_last_meal(t_philo_bonus_individual *philo_stats)
 	}
 }
 
-void	*monitor_life(void *philo_things)
+/**
+ * @brief Always checks if the philo eated n times or if philo died of
+ * starvation
+ *
+ * @param philo_thing Philo individual structure that contains all
+ * the necesary data
+ * @return Always NULL
+ */
+static void	*monitor_life(void *philo_things)
 {
 	t_philo_bonus_individual	*philo_stats;
 	int							wait;

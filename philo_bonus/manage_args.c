@@ -6,12 +6,19 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:56:17 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/06 14:23:00 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 13:19:42 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosopher_bonus.h"
 
+/**
+ * @brief Checks if all the characters are integers,
+ * also checks if first one is a sign
+ *
+ * @param arg The string to be checked
+ * @return 1 if it's a real number, 0 if not
+ */
 static inline int	check_all_num(char *arg)
 {
 	int	ret;
@@ -32,6 +39,12 @@ static inline int	check_all_num(char *arg)
 	return (ret);
 }
 
+/**
+ * @brief Cast the string to integer and checks if it's a real Integer value
+ *
+ * @param arg The string to be checked
+ * @return The integer passed trhough param, or -1 if something went wrong
+ */
 static int	get_num(char *arg)
 {
 	long long	ret;
@@ -44,6 +57,15 @@ static int	get_num(char *arg)
 	return ((int)ret);
 }
 
+/**
+ * @brief Analize all the args received, and checks if args are real integers.
+ * In other case ends the program.
+ *
+ * @param argc Number of items user passed as arguments.
+ * @param argv All data received by user.
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @return Void
+ */
 static inline void	load_init_values(int argc, char **argv,
 		t_philo_bonus_common *common_args)
 {
@@ -74,46 +96,35 @@ static inline void	load_init_values(int argc, char **argv,
 	}
 }
 
+/**
+ * @brief Creates all the semaphores that will be used by all philosophers.
+ *
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @return Void
+ */
 static void	create_common_semaphores(t_philo_bonus_common *common_args)
 {
-	// liberar bien?
 	common_args->sem_forks = sem_open("/forks", O_CREAT, 0666,
 			common_args->assistants);
 	if (!common_args->sem_forks)
-		return (write(2, "Err creating sem forks\n", 23), exit(EXIT_FAILURE));
+		return (write(2, "Err sem_forks\n", 14), exit(EXIT_FAILURE));
 	sem_unlink("/forks");
 	common_args->at_least_pair = sem_open("/pair_forks", O_CREAT, 0666, 1);
 	if (!common_args->sem_forks)
-		return (write(2, "Err creating pair forks\n", 24), exit(EXIT_FAILURE));
+		return (write(2, "Err pair_forks\n", 15), close_aux(common_args, 0));
 	sem_unlink("/pair_forks");
 	common_args->kylix = sem_open("/kylix", O_CREAT, 0666, 1);
 	if (!common_args->sem_forks)
-		return (write(2, "Err creating pair forks\n", 24), exit(EXIT_FAILURE));
+		return (write(2, "Err kylix\n", 10), close_aux(common_args, 1));
 	sem_unlink("/kylix");
 	common_args->death = sem_open("/death", O_CREAT, 0666, 0);
 	if (!common_args->death)
-		return (write(2, "Err creating death\n", 19), exit(EXIT_FAILURE));
+		return (write(2, "Err death\n", 10), close_aux(common_args, 2));
 	sem_unlink("/death");
 	common_args->n_meals = sem_open("/n_meals", O_CREAT, 0666, 0);
-	if (!common_args->death)
-		return (write(2, "Err creating n_meals\n", 21), exit(EXIT_FAILURE));
+	if (!common_args->n_meals)
+		return (write(2, "Err n_meals\n", 12), close_aux(common_args, 3));
 	sem_unlink("/n_meals");
-}
-
-char	*get_destroyer_name(int id)
-{
-	char	*ret;
-	char	*str_id;
-
-	str_id = ft_itoa(id);
-	ret = malloc(ft_strlen("/sem_destroyer_") + ft_strlen(str_id) + 1);
-	if (!ret)
-		return (NULL);
-	ft_bzero(ret, ft_strlen("/sem_destroyer_") + ft_strlen(str_id) + 1);
-	ft_strlcat(ret, "/sem_destroyer_", ft_strlen("/sem_destroyer_"));
-	ft_strlcat(ret, str_id, ft_strlen(str_id));
-	free(str_id);
-	return (ret);
 }
 
 void	start_philo_bonus_common_t(int argc, char **argv,
@@ -128,7 +139,7 @@ void	start_philo_bonus_common_t(int argc, char **argv,
 	common_args->destroyer_of_worlds = (sem_t **)malloc(common_args->assistants
 			* sizeof(sem_t *));
 	if (!common_args->destroyer_of_worlds)
-		exit(EXIT_FAILURE); // Close all sem?
+		return (write(2, "Err destroyer\n", 14), close_aux(common_args, 4));
 	i = 0;
 	while (i < common_args->assistants)
 	{
