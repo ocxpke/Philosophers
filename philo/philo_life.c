@@ -6,12 +6,19 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:28 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 17:59:18 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:25:07 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/**
+ * @brief Selects the color associated to philo by his ID.
+ *
+ * @param philo Individual data from every philosopher
+ * @param message Message to be printed by philosopher.
+ * @return Void
+ */
 static inline void	colored_print(t_philo_single *philo, char *message)
 {
 	char	*color;
@@ -32,6 +39,14 @@ static inline void	colored_print(t_philo_single *philo, char *message)
 		color, philo->id + 1, message, ANSI_RESET);
 }
 
+/**
+ * @brief Philo says [message] printed with an associated color and
+ * waiting for the mutex's required
+ *
+ * @param philo Individual data from every philosopher
+ * @param message Message to be printed by philosopher.
+ * @return Void
+ */
 static inline void	philo_says(t_philo_single *philo, char *message)
 {
 	pthread_mutex_lock(&(philo->check_if_alive));
@@ -49,7 +64,14 @@ static inline void	philo_says(t_philo_single *philo, char *message)
 	pthread_mutex_unlock(&(philo->check_if_alive));
 }
 
-void	philo_meal(t_philo_single *philo)
+/**
+ * @brief Steps to be done by the philosopher to eat.
+ * (Sem waits and post & checking dead status and n_meals)
+ *
+ * @param philo Individual data from every philosopher
+ * @return Void
+ */
+static void	philo_meal(t_philo_single *philo)
 {
 	int	first_to_take;
 	int	second_to_take;

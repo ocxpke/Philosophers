@@ -6,12 +6,18 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 18:12:05 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:41:13 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/**
+ * @brief Checks if philo died or has eaten n times
+ *
+ * @param all_philos All philosophers
+ * @return Void
+ */
 static inline int	all_ended_eating(t_philo_single *all_philos)
 {
 	int	ret;
@@ -37,6 +43,13 @@ static inline int	all_ended_eating(t_philo_single *all_philos)
 	return (ret);
 }
 
+/**
+ * @brief Checks if philo died or has eaten n times
+ *
+ * @param philos All data needed by single philo
+ * @param loop Continue/Stops the life cycle
+ * @return Void
+ */
 static inline void	check_philos_status(t_philo_single *all_philos, int *loop)
 {
 	int	time_passed;
@@ -65,6 +78,12 @@ static inline void	check_philos_status(t_philo_single *all_philos, int *loop)
 	usleep(1000);
 }
 
+/**
+ * @brief Kills all the running threads
+ *
+ * @param all_philos All data needed by single philo
+ * @return Void
+ */
 static inline void	stop_running_philos(t_philo_single *all_philos)
 {
 	int	i;
@@ -79,7 +98,13 @@ static inline void	stop_running_philos(t_philo_single *all_philos)
 	}
 }
 
-void	*monitoring_philos(void *philos)
+/**
+ * @brief Life cycle of philo_thread
+ *
+ * @param philos All data needed by single philo
+ * @return Always NULL
+ */
+static void	*monitoring_philos(void *philos)
 {
 	t_philo_single	*all_philos;
 	int				loop;

@@ -6,12 +6,19 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 20:56:17 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 18:00:31 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:34:08 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/**
+ * @brief Checks if all the characters are integers,
+ * also checks if first one is a sign
+ *
+ * @param arg The string to be checked
+ * @return 1 if it's a real number, 0 if not
+ */
 static inline int	check_all_num(char *arg)
 {
 	int	ret;
@@ -32,6 +39,12 @@ static inline int	check_all_num(char *arg)
 	return (ret);
 }
 
+/**
+ * @brief Cast the string to integer and checks if it's a real Integer value
+ *
+ * @param arg The string to be checked
+ * @return The integer passed trhough param, or -1 if something went wrong
+ */
 static int	get_num(char *arg)
 {
 	long long	ret;
@@ -44,6 +57,15 @@ static int	get_num(char *arg)
 	return ((int)ret);
 }
 
+/**
+ * @brief Analize all the args received, and checks if args are real integers.
+ * In other case ends the program.
+ *
+ * @param argc Number of items user passed as arguments.
+ * @param argv All data received by user.
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @return Void
+ */
 static inline void	load_init_values(int argc, char **argv,
 		t_philo_common *common_args)
 {
@@ -74,6 +96,12 @@ static inline void	load_init_values(int argc, char **argv,
 	}
 }
 
+/**
+ * @brief Creates all shraed mutex form all philos.
+ *
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @return Void
+ */
 inline static void	create_mutexs(t_philo_common *common_args)
 {
 	int	i;

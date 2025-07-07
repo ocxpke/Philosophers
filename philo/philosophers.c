@@ -6,12 +6,21 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 17:58:38 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 17:45:33 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:09:15 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/**
+ * @brief Liberates all resources allocated that are common for all
+ * philosophers
+ *
+ * @param common_args All args shared by philosophers
+ * @param philosopher Array of philosophers
+ * @param philo_threds Array of threads
+ * @return Void
+ */
 static inline void	free_philo(t_philo_common common_args,
 		t_philo_single *philosopher, pthread_t *philo_threads)
 {
@@ -26,7 +35,6 @@ static inline void	free_philo(t_philo_common common_args,
 		pthread_mutex_destroy(&(common_args.forks[i]));
 		i++;
 	}
-	pthread_mutex_destroy(&common_args.kylix);
 	free(common_args.forks);
 	free(philosopher);
 	free(philo_threads);

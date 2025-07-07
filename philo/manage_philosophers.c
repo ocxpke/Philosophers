@@ -6,12 +6,20 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:45 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 17:58:47 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 14:31:17 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+/**
+ * @brief Liberates resources if an error ocurrs
+ *
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @param philosophers Every single data for every philosopher
+ * @param c Mode to know what to liberate.
+ * @return Void
+ */
 static inline void	free_on_error(t_philo_common *common_args,
 		t_philo_single **philosophers, int c)
 {
@@ -26,6 +34,13 @@ static inline void	free_on_error(t_philo_common *common_args,
 	exit(EXIT_FAILURE);
 }
 
+/**
+ * @brief Assign all data needed by every single philosopher
+ *
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @param philosophers Every single data for every philosopher
+ * @return Void
+ */
 static inline void	fill_philos(t_philo_common *common_args,
 		t_philo_single *philosophers)
 {
@@ -48,6 +63,14 @@ static inline void	fill_philos(t_philo_common *common_args,
 	}
 }
 
+/**
+ * @brief Launches n threads one per philosopher
+ *
+ * @param common_args Semaphores, and basic data shared by all philosophers.
+ * @param philosophers Every single data for every philosopher
+ * @param philo_threads Every thread that is going to be launched
+ * @return Void
+ */
 static inline void	run_philos(t_philo_common *common_args,
 		t_philo_single *philosophers, pthread_t *philo_threads)
 {
