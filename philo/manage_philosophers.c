@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 20:46:45 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/07 14:31:17 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:38:18 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ static inline void	run_philos(t_philo_common *common_args,
 	common_args->epoch = get_act_time();
 	while (i < common_args->assistants)
 	{
+		if ((i % 2) == 0)
+			usleep((common_args->time_to_die * 1000) / 20);
 		pthread_create(&(philo_threads[i]), NULL, philo_life,
 			&(philosophers[i]));
 		i++;

@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 20:12:44 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/01 18:00:49 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:22:41 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ inline void	assign_order_forks(t_philo_single *philo, int *first_fork,
 
 	left_fork = philo->id;
 	right_fork = (philo->id + 1) % philo->common_args->assistants;
-	if (left_fork < right_fork)
+	if ((philo->id % 2 == 0) || (((philo->common_args->assistants % 2) != 0)
+			&& (philo->id == (philo->common_args->assistants - 1))))
 	{
 		*first_fork = left_fork;
 		*second_fork = right_fork;
