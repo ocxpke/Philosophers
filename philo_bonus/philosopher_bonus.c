@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 18:11:15 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/07 13:10:36 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/07 15:00:01 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void	free_philo_bonus(t_philo_bonus_common *common_args, pid_t **all_pids)
 }
 
 /**
-
  * @brief Sends a signal to all process that are waiting to end.
-   Also waits for them to end.
+ * Also waits for them to end.
  *
  * @param common_args Semaphores, and basic data shared by all philosophers.
  * @param all_pids Array of all pid_t from all process created.
