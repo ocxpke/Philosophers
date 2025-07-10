@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 20:33:19 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/07/07 14:41:13 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/07/10 14:15:38 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static inline void	check_philos_status(t_philo_single *all_philos, int *loop)
 		}
 		i++;
 	}
-	usleep(1000);
+	usleep(1333);
 }
 
 /**
